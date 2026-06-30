@@ -433,7 +433,7 @@
       </svg>
       <div class="header-text">
         <h1>CWG 2026 · Team Scotland</h1>
-        <p>Swimming Schedule · Tollcross International</p>
+        <p>Swimming Schedule · Tollcross International · <span id="lastUpdated"></span></p>
       </div>
     </div>
     <div class="cwg-logo-wrap">
@@ -677,65 +677,67 @@ const TIMETABLE = [
   [12,'K','12K','Mens 4x100m Medley Relay','M','F','4x100 MED (M) F'],
 ];
 
+const LAST_UPDATED = '30 Jun 2026, 14:46';
+
 const SWIMMERS = {
-  'Angharad Evans':      ['4x100 FS (F) F','100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
-  'Anna Morgan':         ['4x100 FS (M) F','100 BR (F) H','100 BR (F) SF','100 BR (F) F','50 BR (F) H','50 BR (F) SF','50 BR (F) F','200 BR (F) H','200 BR (F) F'],
+  'Angharad Evans':      ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
+  'Anna Morgan':         ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','50 BR (F) H','50 BR (F) SF','50 BR (F) F','200 BR (F) H','200 BR (F) F'],
   'Archie Goodburn':     ['50 BR (M) H','50 BR (M) SF','50 BR (M) F'],
-  'Astrid Carroll':      ['S13 100 FS (F) H','S13 50 FS (F) H','S13 50 FS (F) F'],
-  'Charlie Hutchison':   ['4x100 FS (F) F','400 FS (M) H','400 FS (M) F','400 IM (M) H','400 IM (M) F','200 FS (M) H','200 FS (M) F'],
-  'Ciara Schlosshan':    ['50 FLY (F) H','4x100 FS (M) F','50 FLY (F) F','100 FLY (F) H','100 FLY (F) SF','100 FLY (F) F','200 FLY (F) H','200 FLY (F) F'],
+  'Astrid Carroll':      ['S13 100 FS (F) H','S13 100 FS (F) F','S13 50 FS (F) H','S13 50 FS (F) F'],
+  'Charlie Hutchison':   ['400 FS (M) H','400 FS (M) F','400 IM (M) H','400 IM (M) F','200 FS (M) H','200 FS (M) F'],
+  'Ciara Schlosshan':    ['50 FLY (F) H','50 FLY (F) SF','50 FLY (F) F','100 FLY (F) H','100 FLY (F) SF','100 FLY (F) F','200 FLY (F) H','200 FLY (F) F'],
   'Dean Fearn':          ['100 FLY (M) H','100 FLY (M) SF','100 FLY (M) F','50 FLY (M) H','50 FLY (M) SF','50 FLY (M) F'],
-  'Duncan Scott':        ['200 IM (M) H','200 FLY (M) H','200 FLY (M) F','200 FS (M) H','200 FS (M) F'],
+  'Duncan Scott':        ['200 IM (M) H','200 IM (M) F','200 FLY (M) H','200 FLY (M) F','200 FS (M) H','200 FS (M) F'],
   'Emma Wood':           ['100 FS (F) H','100 FS (F) SF','100 FS (F) F','50 FS (F) H','50 FS (F) SF','50 FS (F) F'],
-  'Evan Jones':          ['200 IM (M) H','100 FLY (M) H','100 FLY (M) SF','100 FLY (M) F','200 FS (M) H','200 FS (M) F'],
+  'Evan Jones':          ['200 IM (M) H','200 IM (M) F','100 FLY (M) H','100 FLY (M) SF','100 FLY (M) F','200 FS (M) H','200 FS (M) F'],
   'Evelyn Davis':        ['100 FS (F) H','100 FS (F) SF','100 FS (F) F'],
-  'Evi Mackie':          ['400 FS (F) H','400 IM (F) H','400 IM (F) F'],
-  'Faye Rogers':         ['SM10 200 IM (F) H','200 FLY (F) H','200 FLY (F) F'],
-  'George Smith':        ['100 BR (M) H','100 BR (M) F','200 BR (M) H','200 BR (M) F'],
-  'Holly McGill':        ['200 BK (F) H','100 BK (F) H','100 BK (F) SF','100 BK (F) F'],
-  'James Clegg':         ['S13 100 FS (M) H','S13 50 FS (M) H','S13 50 FS (M) F'],
-  'Jamie Ferguson':      ['50 BK (M) H','50 BK (M) F','100 BK (M) H','100 BK (M) SF','100 BK (M) F'],
+  'Evi Mackie':          ['400 FS (F) H','400 FS (F) F','400 IM (F) H','400 IM (F) F'],
+  'Faye Rogers':         ['SM10 200 IM (F) H','SM10 200 IM (F) F','200 FLY (F) H','200 FLY (F) F'],
+  'George Smith':        ['100 BR (M) H','100 BR (M) SF','100 BR (M) F','200 BR (M) H','200 BR (M) F'],
+  'Holly McGill':        ['200 BK (F) H','200 BK (F) F','100 BK (F) H','100 BK (F) SF','100 BK (F) F'],
+  'James Clegg':         ['S13 100 FS (M) H','S13 100 FS (M) F','S13 50 FS (M) H','S13 50 FS (M) F'],
+  'Jamie Ferguson':      ['50 BK (M) H','50 BK (M) SF','50 BK (M) F','100 BK (M) H','100 BK (M) SF','100 BK (M) F'],
   'Jensen Norris':       ['100 FS (M) H','100 FS (M) SF','100 FS (M) F'],
-  'Joshua Mitchell':     ['100 BR (M) H','100 BR (M) F','200 BR (M) H','200 BR (M) F'],
-  'Katie Shanahan':      ['200 BK (F) H','100 BK (F) H','100 BK (F) SF','100 BK (F) F','200 IM (F) H','200 IM (F) F'],
+  'Joshua Mitchell':     ['100 BR (M) H','100 BR (M) SF','100 BR (M) F','200 BR (M) H','200 BR (M) F'],
+  'Katie Shanahan':      ['200 BK (F) H','200 BK (F) F','100 BK (F) H','100 BK (F) SF','100 BK (F) F','200 IM (F) H','200 IM (F) F'],
   'Keanna MacInnes':     ['100 FLY (F) H','100 FLY (F) SF','100 FLY (F) F','200 FLY (F) H','200 FLY (F) F'],
-  'Lucy Grieve':         ['50 FLY (F) H','50 FLY (F) F','100 FLY (F) H','100 FLY (F) SF','100 FLY (F) F'],
+  'Lucy Grieve':         ['50 FLY (F) H','50 FLY (F) SF','50 FLY (F) F','100 FLY (F) H','100 FLY (F) SF','100 FLY (F) F'],
   'Lucy Hope':           ['100 FS (F) H','100 FS (F) SF','100 FS (F) F'],
   'Luke Hornsey':        ['400 FS (M) H','400 FS (M) F','800 FS (M) H','800 FS (M) F','1500 FS (M) H','1500 FS (M) F'],
-  'Matthew Ward':        ['200 IM (M) H','50 BK (M) H','50 BK (M) F','200 BK (M) H','200 BK (M) F','100 BK (M) H','100 BK (M) SF','100 BK (M) F'],
-  'Megan Barnes':        ['400 FS (F) H','200 FS (F) H','200 FS (F) F'],
-  'Ollie Carter':        ['S10 100 FLY (M) H','SB9 100 BR (M) H','SB9 100 BR (M) F'],
+  'Matthew Ward':        ['200 IM (M) H','50 BK (M) H','200 IM (M) F','50 BK (M) SF','50 BK (M) F','200 BK (M) H','200 BK (M) F','100 BK (M) H','100 BK (M) SF','100 BK (M) F'],
+  'Megan Barnes':        ['400 FS (F) H','400 FS (F) F','200 FS (F) H','200 FS (F) F'],
+  'Ollie Carter':        ['S10 100 FLY (M) H','S10 100 FLY (M) F','SB9 100 BR (M) H','SB9 100 BR (M) F'],
   'Sam Downie':          ['S9 100 BK (M) H','S9 100 BK (M) F'],
-  'Scott Gibson':        ['50 BK (M) H','50 BK (M) F'],
+  'Scott Gibson':        ['50 BK (M) H','50 BK (M) SF','50 BK (M) F'],
   'Sean McCann':         ['400 FS (M) H','400 FS (M) F','800 FS (M) H','800 FS (M) F','1500 FS (M) H','1500 FS (M) F'],
   'Stefan Krawiec':      ['100 FS (M) H','100 FS (M) SF','100 FS (M) F'],
-  'Stephen Clegg':       ['S13 100 FS (M) H','S13 50 FS (M) H','S13 50 FS (M) F'],
-  'TBC 1 (4x100 FS (F))': ['4x100 FS (F) H'],
-  'TBC 1 (4x100 FS (M))': ['4x100 FS (M) H'],
+  'Stephen Clegg':       ['S13 100 FS (M) H','S13 100 FS (M) F','S13 50 FS (M) H','S13 50 FS (M) F'],
+  'TBC 1 (4x100 FS (F))': ['4x100 FS (F) H','4x100 FS (F) F'],
+  'TBC 1 (4x100 FS (M))': ['4x100 FS (M) H','4x100 FS (M) F'],
   'TBC 1 (4x100 FS (MX))': ['4x100 FS (MX) H','4x100 FS (MX) F'],
   'TBC 1 (4x100 MED (F))': ['4x100 MED (F) H','4x100 MED (F) F'],
   'TBC 1 (4x100 MED (M))': ['4x100 MED (M) H','4x100 MED (M) F'],
   'TBC 1 (4x100 MED (MX))': ['4x100 MED (MX) H','4x100 MED (MX) F'],
   'TBC 1 (4x200 FS (F))': ['4x200 FS (F) H','4x200 FS (F) F'],
   'TBC 1 (4x200 FS (M))': ['4x200 FS (M) H','4x200 FS (M) F'],
-  'TBC 2 (4x100 FS (F))': ['4x100 FS (F) H'],
-  'TBC 2 (4x100 FS (M))': ['4x100 FS (M) H'],
+  'TBC 2 (4x100 FS (F))': ['4x100 FS (F) H','4x100 FS (F) F'],
+  'TBC 2 (4x100 FS (M))': ['4x100 FS (M) H','4x100 FS (M) F'],
   'TBC 2 (4x100 FS (MX))': ['4x100 FS (MX) H','4x100 FS (MX) F'],
   'TBC 2 (4x100 MED (F))': ['4x100 MED (F) H','4x100 MED (F) F'],
   'TBC 2 (4x100 MED (M))': ['4x100 MED (M) H','4x100 MED (M) F'],
   'TBC 2 (4x100 MED (MX))': ['4x100 MED (MX) H','4x100 MED (MX) F'],
   'TBC 2 (4x200 FS (F))': ['4x200 FS (F) H','4x200 FS (F) F'],
   'TBC 2 (4x200 FS (M))': ['4x200 FS (M) H','4x200 FS (M) F'],
-  'TBC 3 (4x100 FS (F))': ['4x100 FS (F) H'],
-  'TBC 3 (4x100 FS (M))': ['4x100 FS (M) H'],
+  'TBC 3 (4x100 FS (F))': ['4x100 FS (F) H','4x100 FS (F) F'],
+  'TBC 3 (4x100 FS (M))': ['4x100 FS (M) H','4x100 FS (M) F'],
   'TBC 3 (4x100 FS (MX))': ['4x100 FS (MX) H','4x100 FS (MX) F'],
   'TBC 3 (4x100 MED (F))': ['4x100 MED (F) H','4x100 MED (F) F'],
   'TBC 3 (4x100 MED (M))': ['4x100 MED (M) H','4x100 MED (M) F'],
   'TBC 3 (4x100 MED (MX))': ['4x100 MED (MX) H','4x100 MED (MX) F'],
   'TBC 3 (4x200 FS (F))': ['4x200 FS (F) H','4x200 FS (F) F'],
   'TBC 3 (4x200 FS (M))': ['4x200 FS (M) H','4x200 FS (M) F'],
-  'TBC 4 (4x100 FS (F))': ['4x100 FS (F) H'],
-  'TBC 4 (4x100 FS (M))': ['4x100 FS (M) H'],
+  'TBC 4 (4x100 FS (F))': ['4x100 FS (F) H','4x100 FS (F) F'],
+  'TBC 4 (4x100 FS (M))': ['4x100 FS (M) H','4x100 FS (M) F'],
   'TBC 4 (4x100 FS (MX))': ['4x100 FS (MX) H','4x100 FS (MX) F'],
   'TBC 4 (4x100 MED (F))': ['4x100 MED (F) H','4x100 MED (F) F'],
   'TBC 4 (4x100 MED (M))': ['4x100 MED (M) H','4x100 MED (M) F'],
@@ -787,6 +789,14 @@ Object.entries(SWIMMERS).forEach(([name, evts]) => {
 });
 
 // ── INIT DROPDOWNS ────────────────────────────────────────────────────────────
+
+// Show last-updated timestamp in header (set automatically by the update tool)
+const lastUpdatedEl = document.getElementById('lastUpdated');
+if (lastUpdatedEl) {
+  lastUpdatedEl.textContent = LAST_UPDATED
+    ? `Last updated: ${LAST_UPDATED}`
+    : '';
+}
 
 const swimmerSel = document.getElementById('swimmerSelect');
 const daySel     = document.getElementById('daySelect');
