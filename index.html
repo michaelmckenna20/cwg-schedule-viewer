@@ -458,20 +458,17 @@
 <!-- sticky controls -->
 <div class="controls-bar">
   <div class="mode-toggle">
-    <button class="mode-btn active" id="btnSwimmer" onclick="setMode('swimmer')">👤 By Swimmer</button>
-    <button class="mode-btn"        id="btnDay"     onclick="setMode('day')">📅 By Day</button>
-    <button class="mode-btn"        id="btnCoach"   onclick="setMode('coach')">🏅 By Coach</button>
+    <button class="mode-btn active" id="btnSwimmer" onclick="setMode('swimmer')">🏊 Swimmer</button>
+    <button class="mode-btn"        id="btnDay"     onclick="setMode('day')">📅 Day</button>
+    <button class="mode-btn"        id="btnCoach"   onclick="setMode('coach')">🎯 Coach</button>
   </div>
   <div class="selector-wrap" id="swimmerWrap">
-    <label for="swimmerSelect">Swimmer</label>
     <select id="swimmerSelect"><option value="">— Select —</option></select>
   </div>
   <div class="selector-wrap" id="dayWrap" style="display:none">
-    <label for="daySelect">Day</label>
     <select id="daySelect"><option value="">— Select —</option></select>
   </div>
   <div class="selector-wrap" id="coachWrap" style="display:none">
-    <label for="coachSelect">Coach</label>
     <select id="coachSelect"><option value="">— Select —</option></select>
   </div>
   <label class="ceremony-toggle" style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">
@@ -1108,7 +1105,7 @@ const TIMETABLE = [
   [12,'K','12K','Mens 4x100m Medley Relay','M','F','4x100 MED (M) F'],
 ];
 
-const LAST_UPDATED = '22 Jul 2026, 15:10';
+const LAST_UPDATED = '22 Jul 2026, 15:46';
 
 const SWIMMERS = {
   'Angharad Evans':      ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
@@ -1324,7 +1321,7 @@ function renderCoach(coach) {
               <span class="ev-flag"></span>
               <span class="ev-num">${i}</span>
               <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-              ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+              ${isFinal ? '<span class="badge-medal">🏅</span>' : (ev.isCeremony ? '<span class="badge-medal">🏆</span>' : '')}
               <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
             </div>
@@ -1335,7 +1332,7 @@ function renderCoach(coach) {
           <span class="ev-spacer"></span>
           <span class="ev-num">${i}</span>
           <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-          ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+          ${isFinal ? '<span class="badge-medal">🏅</span>' : (ev.isCeremony ? '<span class="badge-medal">🏆</span>' : '')}
           <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
         </div>`;
@@ -1489,7 +1486,7 @@ function renderSwimmer(swimmer) {
       ${mine ? '<span class="ev-flag"></span>' : '<span class="ev-spacer"></span>'}
       <span class="ev-num">${i}</span>
       <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-      ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+      ${isFinal ? '<span class="badge-medal">🏅</span>' : (ev.isCeremony ? '<span class="badge-medal">🏆</span>' : '')}
       <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
     </div>`;
@@ -1533,6 +1530,7 @@ function renderDay(idx) {
             <span class="ev-flag"></span>
             <span class="ev-num">${i+1}</span>
             <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
+            ${ev.stage === 'F' ? '<span class="badge-medal">🏅</span>' : (ev.isCeremony ? '<span class="badge-medal">🏆</span>' : '')}
             <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
           </div>
@@ -1543,6 +1541,7 @@ function renderDay(idx) {
         <span class="ev-spacer"></span>
         <span class="ev-num">${i+1}</span>
         <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
+        ${ev.stage === 'F' ? '<span class="badge-medal">🏅</span>' : (ev.isCeremony ? '<span class="badge-medal">🏆</span>' : '')}
         <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
       </div>`;
