@@ -289,6 +289,11 @@
   .badge-H  { background: var(--heat-bg);  color: #1d4ed8; border: 1px solid var(--heat-border); }
   .badge-SF { background: var(--semi-bg);  color: #854d0e; border: 1px solid var(--semi-border); }
   .badge-F  { background: var(--final-bg); color: #15803d; border: 1px solid var(--final-border); }
+  .badge-MC { background: #e2e8f0; color: #1f2937; border: 1px solid #64748b; }
+  .badge-medal { font-size: 12px; line-height: 1; flex-shrink: 0; }
+  .ev-time { flex-shrink: 0; width: 38px; font-size: 10px; font-weight: 800; color: var(--royal); letter-spacing: -0.2px; }
+  .ev-card.ceremony-row { background: #cbd5e1; border-left: 4px solid #64748b; padding-left: 7px; }
+  .ev-card.ceremony-row .ev-name { color: #1f2937; font-weight: 700; }
 
   .ev-name { flex: 1; font-size: 11px; font-weight: 500; color: var(--text); line-height: 1.3; }
 
@@ -469,6 +474,10 @@
     <label for="coachSelect">Coach</label>
     <select id="coachSelect"><option value="">— Select —</option></select>
   </div>
+  <label class="ceremony-toggle" style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">
+    <input type="checkbox" id="toggleCeremonies" checked onchange="toggleMedalCeremonies(this.checked)">
+    🏅 Ceremonies
+  </label>
   <button class="print-btn" id="printBtn" onclick="window.print()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
@@ -553,6 +562,420 @@ const SESSION_LABELS = {
   9:'Morning Session · 10:30',10:'Evening Session · 19:00',
   11:'Morning Session · 10:30',12:'Evening Session · 19:00',
 };
+
+
+const EVENT_TIMES = {
+  "1A": "10:30",
+  "1B": "10:57",
+  "1C": "11:10",
+  "1D": "11:14",
+  "1E": "11:18",
+  "1F": "11:32",
+  "1G": "11:46",
+  "1H": "12:01",
+  "1I": "12:18",
+  "1J": "12:29",
+  "1K": "12:33",
+  "1L": "12:45",
+  "2A": "19:07",
+  "2B": "19:16",
+  "2C": "19:23",
+  "2D": "19:30",
+  "2E": "19:51",
+  "2F": "19:59",
+  "2G": "20:08",
+  "2H": "20:31",
+  "2I": "20:41",
+  "2J": "20:49",
+  "2K": "21:11",
+  "2L": "21:21",
+  "3A": "10:30",
+  "3B": "10:50",
+  "3C": "11:10",
+  "3D": "11:26",
+  "3E": "11:40",
+  "3F": "11:52",
+  "3G": "12:16",
+  "3H": "12:21",
+  "3I": "12:25",
+  "4A": "19:07",
+  "4B": "19:16",
+  "4C": "19:26",
+  "4D": "19:41",
+  "4E": "19:49",
+  "4F": "19:55",
+  "4G": "20:15",
+  "4H": "20:25",
+  "4I": "20:32",
+  "4J": "20:55",
+  "4K": "21:04",
+  "4L": "21:11",
+  "5A": "10:30",
+  "5B": "10:53",
+  "5C": "11:10",
+  "5D": "11:30",
+  "5E": "11:44",
+  "5F": "11:58",
+  "5G": "12:03",
+  "5H": "12:09",
+  "6A": "19:07",
+  "6B": "19:13",
+  "6C": "19:20",
+  "6D": "19:26",
+  "6E": "19:47",
+  "6F": "19:57",
+  "6G": "20:20",
+  "6H": "20:27",
+  "6I": "20:34",
+  "6J": "20:59",
+  "6K": "21:04",
+  "6L": "21:26",
+  "7A": "10:30",
+  "7B": "10:43",
+  "7C": "10:58",
+  "7D": "11:13",
+  "7E": "11:36",
+  "7F": "11:46",
+  "7G": "11:57",
+  "7H": "12:02",
+  "7I": "12:09",
+  "8A": "19:07",
+  "8B": "19:17",
+  "8C": "19:26",
+  "8D": "19:32",
+  "8E": "19:54",
+  "8F": "20:01",
+  "8G": "20:07",
+  "8H": "20:28",
+  "8I": "20:37",
+  "8J": "21:05",
+  "8K": "21:14",
+  "8L": "21:20",
+  "9A": "10:30",
+  "9B": "10:45",
+  "9C": "10:58",
+  "9D": "11:16",
+  "9E": "11:35",
+  "9F": "11:49",
+  "9G": "12:12",
+  "9H": "12:25",
+  "9I": "12:30",
+  "9J": "12:35",
+  "10A": "19:07",
+  "10B": "19:12",
+  "10C": "19:18",
+  "10D": "19:39",
+  "10E": "19:47",
+  "10F": "20:12",
+  "10G": "20:20",
+  "10H": "20:36",
+  "10I": "20:42",
+  "10J": "20:49",
+  "10K": "21:03",
+  "10L": "21:12",
+  "10M": "21:42",
+  "11A": "10:30",
+  "11B": "10:44",
+  "11C": "11:07",
+  "11D": "11:16",
+  "11E": "11:20",
+  "11F": "11:26",
+  "11G": "11:45",
+  "11H": "11:58",
+  "12A": "19:07",
+  "12B": "19:13",
+  "12C": "19:21",
+  "12D": "19:43",
+  "12E": "19:49",
+  "12F": "20:09",
+  "12G": "20:16",
+  "12H": "20:37",
+  "12I": "20:44",
+  "12J": "21:20",
+  "12K": "21:31"
+};
+const MEDAL_CEREMONIES = [
+  {
+    "sess": 2,
+    "time": "19:36",
+    "name": "Womens 400m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "19:44",
+    "name": "Mens 200m Individual Medley Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "20:16",
+    "name": "Womens 100m Freestyle S13 Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "20:24",
+    "name": "Mens 100m Freestyle S13 Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "20:56",
+    "name": "Womens 200m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "21:03",
+    "name": "Womens 200m Individual Medley SM10 Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "21:31",
+    "name": "Mens 100m Butterfly S10 Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "21:38",
+    "name": "Womens 4 x 100m Freestyle Relay Medal Ceremony"
+  },
+  {
+    "sess": 2,
+    "time": "21:47",
+    "name": "Mens 4 x 100m Freestyle Relay Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "19:34",
+    "name": "Mens 400m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "20:00",
+    "name": "Womens 200m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "20:08",
+    "name": "Mens 50m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "20:40",
+    "name": "Womens 50m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "20:47",
+    "name": "Womens 200m Freestyle S14 Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "21:21",
+    "name": "Mens 200m Freestyle S14 Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "21:28",
+    "name": "Mens 100m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 4,
+    "time": "21:36",
+    "name": "Mixed 4 x 100m Freestyle Relay Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "19:32",
+    "name": "Womens 100m Backstroke S9 Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "19:40",
+    "name": "Mens 100m Backstroke S9 Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "20:05",
+    "name": "Womens 100m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "20:13",
+    "name": "Mens 100m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "20:44",
+    "name": "Womens 100m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "20:51",
+    "name": "Mens 200m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "21:41",
+    "name": "Mens 50m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "21:48",
+    "name": "Womens 1500m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 6,
+    "time": "21:56",
+    "name": "Mens 4 x 200m Freestyle Relay Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "19:39",
+    "name": "Womens 400m Individual Medley Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "19:46",
+    "name": "Womens 100m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "20:13",
+    "name": "Mens 100m Breaststroke SB9 Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "20:21",
+    "name": "Womens 100m Breaststroke SB8 Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "20:50",
+    "name": "Womens 100m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "20:58",
+    "name": "Mens 50m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "21:34",
+    "name": "Mens 800m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "21:42",
+    "name": "Mens 200m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 8,
+    "time": "21:49",
+    "name": "Womens 4 x 200m Freestyle Relay Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "19:24",
+    "name": "Mens 50m Freestyle S13 Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "19:32",
+    "name": "Womens 50m Freestyle S13 Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "19:57",
+    "name": "Mens 100m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "20:04",
+    "name": "Womens 200m Individual Medley Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "20:28",
+    "name": "Mens 400m Individual Medley Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "20:55",
+    "name": "Womens 50m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "21:27",
+    "name": "Mens 200m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "21:34",
+    "name": "Womens 50m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "21:52",
+    "name": "Womens 800m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 10,
+    "time": "22:00",
+    "name": "Mixed 4 x 100m Medley Relay Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "19:28",
+    "name": "Mens 100m Backstroke Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "19:35",
+    "name": "Womens 200m Breaststroke Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "19:54",
+    "name": "Mens 200m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "20:02",
+    "name": "Womens 50m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "20:22",
+    "name": "Mens 50m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "20:29",
+    "name": "Womens 100m Freestyle S9 Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "21:05",
+    "name": "Mens 50m Freestyle S7 Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "21:13",
+    "name": "Womens 200m Butterfly Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "21:42",
+    "name": "Mens 1500m Freestyle Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "21:49",
+    "name": "Womens 4 x 100m Medley Relay Medal Ceremony"
+  },
+  {
+    "sess": 12,
+    "time": "21:58",
+    "name": "Mens 4 x 100m Medley Relay Medal Ceremony"
+  }
+];
 
 const TIMETABLE = [
   [1,'A','1A','Womens 400m Freestyle','F','H','400 FS (F) H'],
@@ -685,7 +1108,7 @@ const TIMETABLE = [
   [12,'K','12K','Mens 4x100m Medley Relay','M','F','4x100 MED (M) F'],
 ];
 
-const LAST_UPDATED = '30 Jun 2026, 15:28';
+const LAST_UPDATED = '22 Jul 2026, 15:10';
 
 const SWIMMERS = {
   'Angharad Evans':      ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
@@ -782,9 +1205,16 @@ function countEvents(codes) {
 }
 
 const SESS_MAP = {};
-TIMETABLE.forEach(([sess,,,name,,stage,code]) => {
+TIMETABLE.forEach(([sess,,id,name,,stage,code]) => {
   if (!SESS_MAP[sess]) SESS_MAP[sess] = [];
-  SESS_MAP[sess].push({name, stage, code});
+  SESS_MAP[sess].push({id, name, stage, code, time: EVENT_TIMES[id] || '', isCeremony: false});
+});
+MEDAL_CEREMONIES.forEach((mc, idx) => {
+  if (!SESS_MAP[mc.sess]) SESS_MAP[mc.sess] = [];
+  SESS_MAP[mc.sess].push({id: `MC${idx+1}`, name: mc.name, stage: 'MC', code: '', time: mc.time, isCeremony: true});
+});
+Object.keys(SESS_MAP).forEach(sid => {
+  SESS_MAP[sid].sort((a,b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
 });
 
 const CODE_SWIMMERS = {};
@@ -879,32 +1309,35 @@ function renderCoach(coach) {
   // and show swimmer name pills (like day view) for events with coach's swimmers
   const cols = DAYS.map(day => {
     const sessions = day.sessions.map(sid => {
-      const evs = SESS_MAP[sid] || [];
+      const evs = visibleEvents(sid);
       let i = 0;
       const rows = evs.map(ev => {
         i++;
-        const racers = squadNames.filter(n => (SWIMMERS[n]||[]).some(e => norm(e)===norm(ev.code)));
+        const racers = ev.isCeremony ? [] : squadNames.filter(n => (SWIMMERS[n]||[]).some(e => norm(e)===norm(ev.code)));
         const mine   = racers.length > 0;
         const isFinal = ev.stage === 'F';
+    const isCeremony = ev.isCeremony;
         if (mine) {
           const pills = racers.map(n=>`<span class="ev-pill">${displayName(n)}</span>`).join('');
-          return `<div class="ev-card has-swimmers">
+          return `<div class="ev-card has-swimmers${ev.isCeremony?' ceremony-row':''}">
             <div style="display:flex;align-items:center;gap:6px;width:100%">
               <span class="ev-flag"></span>
               <span class="ev-num">${i}</span>
               <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-              ${isFinal ? '<span class="badge-medal">🏅</span>' : ''}
+              ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+              <span class="ev-time">${ev.time || ""}</span>
               <span class="ev-name">${ev.name}</span>
             </div>
             <div class="ev-pills">${pills}</div>
           </div>`;
         }
-        return `<div class="ev-card">
+        return `<div class="ev-card${ev.isCeremony?' ceremony-row':''}">
           <span class="ev-spacer"></span>
           <span class="ev-num">${i}</span>
           <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-          ${isFinal ? '<span class="badge-medal">🏅</span>' : ''}
-          <span class="ev-name">${ev.name}</span>
+          ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+          <span class="ev-time">${ev.time || ""}</span>
+              <span class="ev-name">${ev.name}</span>
         </div>`;
       }).join('');
 
@@ -942,7 +1375,17 @@ if (headerLogo && printLogo) printLogo.src = headerLogo.src;
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
-function badgeLabel(s) { return s==='SF'?'Semi': s==='H'?'Heat':'Final'; }
+function badgeLabel(s) { return s==='MC'?'Medal': s==='SF'?'Semi': s==='H'?'Heat':'Final'; }
+function showCeremonies() { const el = document.getElementById('toggleCeremonies'); return !el || el.checked; }
+function visibleEvents(sessId) { return (SESS_MAP[sessId] || []).filter(ev => !ev.isCeremony || showCeremonies()); }
+function eventCardClass(ev, base='ev-card') { return `${base}${ev.isCeremony ? ' ceremony-row' : ''}`; }
+function toggleMedalCeremonies(checked) {
+  const swimmerActive = document.getElementById('btnSwimmer').classList.contains('active');
+  const dayActive = document.getElementById('btnDay').classList.contains('active');
+  if (swimmerActive) renderSwimmer(swimmerSel.value);
+  else if (dayActive) renderDay(parseInt(daySel.value));
+  else renderCoach(coachSel.value);
+}
 
 function emptyHTML(title, sub) {
   return `<div class="empty-state">
@@ -968,7 +1411,7 @@ function showLegend(show, label) {
 function dayColHTML(day, rowFn, showFooter) {
   let sessions = '';
   day.sessions.forEach(sid => {
-    const rows = (SESS_MAP[sid] || []).map((ev, i) => rowFn(ev, i + 1)).join('');
+    const rows = visibleEvents(sid).map((ev, i) => rowFn(ev, i + 1)).join('');
     let footer = '';
     if (showFooter) {
       const ct = (SESS_MAP[sid]||[]).reduce((s,ev) => s+(CODE_SWIMMERS[norm(ev.code)]||[]).length, 0);
@@ -1040,14 +1483,15 @@ function renderSwimmer(swimmer) {
   document.getElementById('printSwimmerName').textContent = cleanName;
 
   const cols = DAYS.map(day => dayColHTML(day, (ev, i) => {
-    const mine = events.some(e => norm(e) === norm(ev.code));
+    const mine = !ev.isCeremony && events.some(e => norm(e) === norm(ev.code));
     const isFinal = ev.stage === 'F';
-    return `<div class="ev-card${mine?' highlighted':''}">
+    return `<div class="ev-card${mine?' highlighted':''}${ev.isCeremony?' ceremony-row':''}">
       ${mine ? '<span class="ev-flag"></span>' : '<span class="ev-spacer"></span>'}
       <span class="ev-num">${i}</span>
       <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-      ${isFinal ? '<span class="badge-medal">🏅</span>' : ''}
-      <span class="ev-name">${ev.name}</span>
+      ${(isFinal || ev.isCeremony) ? '<span class="badge-medal">🏅</span>' : ''}
+      <span class="ev-time">${ev.time || ""}</span>
+              <span class="ev-name">${ev.name}</span>
     </div>`;
   })).join('');
 
@@ -1080,25 +1524,27 @@ function renderDay(idx) {
   // Build two session columns
   let cols = '';
   day.sessions.forEach(sid => {
-    const rows = (SESS_MAP[sid]||[]).map((ev, i) => {
-      const racers = CODE_SWIMMERS[norm(ev.code)] || [];
+    const rows = visibleEvents(sid).map((ev, i) => {
+      const racers = ev.isCeremony ? [] : (CODE_SWIMMERS[norm(ev.code)] || []);
       if (racers.length) {
         const pills = racers.map(n=>`<span class="ev-pill">${displayName(n)}</span>`).join('');
-        return `<div class="ev-card has-swimmers">
+        return `<div class="ev-card has-swimmers${ev.isCeremony?' ceremony-row':''}">
           <div class="ev-card-top">
             <span class="ev-flag"></span>
             <span class="ev-num">${i+1}</span>
             <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-            <span class="ev-name">${ev.name}</span>
+            <span class="ev-time">${ev.time || ""}</span>
+              <span class="ev-name">${ev.name}</span>
           </div>
           <div class="ev-pills">${pills}</div>
         </div>`;
       }
-      return `<div class="ev-card">
+      return `<div class="ev-card${ev.isCeremony?' ceremony-row':''}">
         <span class="ev-spacer"></span>
         <span class="ev-num">${i+1}</span>
         <span class="ev-badge badge-${ev.stage}">${badgeLabel(ev.stage)}</span>
-        <span class="ev-name">${ev.name}</span>
+        <span class="ev-time">${ev.time || ""}</span>
+              <span class="ev-name">${ev.name}</span>
       </div>`;
     }).join('');
 
