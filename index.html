@@ -1079,7 +1079,7 @@ const TIMETABLE = [
   [12,'K','12K','Mens 4x100m Medley Relay','M','F','4x100 MED (M) F'],
 ];
 
-const LAST_UPDATED = '22 Jul 2026, 16:02';
+const LAST_UPDATED = '22 Jul 2026, 16:34';
 
 const SWIMMERS = {
   'Angharad Evans':      ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
@@ -1252,7 +1252,7 @@ function renderCoach(coach) {
   document.getElementById('dayStrip').style.display   = 'none';
   document.getElementById('coachStrip').style.display = 'none';
   
-  showLegend(true, "Coach's swimmer racing");
+  showLegend(true, "Swimmer's race");
 
   if (!coach) {
     showLegend(false);
@@ -1488,7 +1488,7 @@ function renderDay(idx) {
   document.getElementById('dayStrip').style.display   = 'flex';
   
   document.getElementById('printSwimmerName').textContent = `${day.label} · ${day.date}`;
-  showLegend(true, 'Scottish swimmer racing');
+  showLegend(true, "Swimmer's race");
 
 
   // In day view we show a single wide column per session side by side
