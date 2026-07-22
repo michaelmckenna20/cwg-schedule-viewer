@@ -329,26 +329,6 @@
   }
   @media (max-width: 700px) { .scroll-hint { display: block; } }
 
-  /* ── PRINT BUTTON ── */
-  .print-btn {
-    display: none;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 16px;
-    background: var(--navy);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-  .print-btn:hover { background: var(--royal); }
-  .print-btn.visible { display: flex; }
-
   /* ── SESSION SWIMMER FOOTER ── */
   .sess-footer {
     padding: 7px 10px;
@@ -446,7 +426,7 @@
       </svg>
       <div class="header-text">
         <h1>CWG 2026 · Team Scotland</h1>
-        <p>Swimming Schedule · Tollcross International · <span id="lastUpdated"></span></p>
+        <p>Swimming Schedule · <span id="lastUpdated"></span></p>
       </div>
     </div>
     <div class="cwg-logo-wrap">
@@ -475,13 +455,7 @@
     <input type="checkbox" id="toggleCeremonies" checked onchange="toggleMedalCeremonies(this.checked)">
     🏅 Ceremonies
   </label>
-  <button class="print-btn" id="printBtn" onclick="window.print()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-      <rect x="6" y="14" width="12" height="8"/>
-    </svg>
-    Print
-  </button>
+  
 </div>
 
 <!-- print-only header -->
@@ -1105,7 +1079,7 @@ const TIMETABLE = [
   [12,'K','12K','Mens 4x100m Medley Relay','M','F','4x100 MED (M) F'],
 ];
 
-const LAST_UPDATED = '22 Jul 2026, 15:46';
+const LAST_UPDATED = '22 Jul 2026, 16:02';
 
 const SWIMMERS = {
   'Angharad Evans':      ['100 BR (F) H','100 BR (F) SF','100 BR (F) F','200 BR (F) H','200 BR (F) F'],
@@ -1277,7 +1251,7 @@ function renderCoach(coach) {
   document.getElementById('swimmerStrip').classList.remove('visible');
   document.getElementById('dayStrip').style.display   = 'none';
   document.getElementById('coachStrip').style.display = 'none';
-  document.getElementById('printBtn').classList.remove('visible');
+  
   showLegend(true, "Coach's swimmer racing");
 
   if (!coach) {
@@ -1299,7 +1273,7 @@ function renderCoach(coach) {
   document.getElementById('coachStripSub').textContent  =
     `· ${realSquad.length} swimmer${realSquad.length!==1?'s':''} · ${coachEvents.size} event${coachEvents.size!==1?'s':''} (incl. relays TBC)`;
   document.getElementById('coachStrip').style.display = 'flex';
-  document.getElementById('printBtn').classList.add('visible');
+  
   document.getElementById('printSwimmerName').textContent = `Coach: ${coach}`;
 
   // render same 6-col layout as swimmer view but highlight coach's events
@@ -1440,7 +1414,7 @@ function setMode(mode) {
   document.getElementById('swimmerStrip').classList.remove('visible');
   document.getElementById('dayStrip').style.display   = 'none';
   document.getElementById('coachStrip').style.display = 'none';
-  document.getElementById('printBtn').classList.remove('visible');
+  
   showLegend(false);
   const emptyMsg = mode==='swimmer' ? 'Select a swimmer above'
                  : mode==='coach'   ? 'Select a coach above'
@@ -1461,7 +1435,7 @@ function renderSwimmer(swimmer) {
   if (!swimmer) {
     strip.classList.remove('visible');
     showLegend(false);
-    document.getElementById('printBtn').classList.remove('visible');
+    
       out.innerHTML = emptyHTML('Select a swimmer above','Their full schedule across all 6 days will appear here');
     return;
   }
@@ -1475,7 +1449,7 @@ function renderSwimmer(swimmer) {
   document.getElementById('stripChips').innerHTML      = uniqueEvents.map(e=>`<span class="strip-chip">${e}</span>`).join('');
   strip.classList.add('visible');
   showLegend(true, "Swimmer's race");
-  document.getElementById('printBtn').classList.add('visible');
+  
 
   document.getElementById('printSwimmerName').textContent = cleanName;
 
@@ -1500,7 +1474,7 @@ function renderSwimmer(swimmer) {
 function renderDay(idx) {
   document.getElementById('swimmerStrip').classList.remove('visible');
   document.getElementById('dayStrip').style.display = 'none';
-  document.getElementById('printBtn').classList.remove('visible');
+  
   if (isNaN(idx)) {
     showLegend(false);
     out.innerHTML = emptyHTML('Select a day above','Every event that day, with Team Scotland swimmers highlighted');
@@ -1512,7 +1486,7 @@ function renderDay(idx) {
   document.getElementById('dayStripName').textContent = `${day.label} · ${day.date}`;
   document.getElementById('dayStripSub').textContent  = '';
   document.getElementById('dayStrip').style.display   = 'flex';
-  document.getElementById('printBtn').classList.add('visible');
+  
   document.getElementById('printSwimmerName').textContent = `${day.label} · ${day.date}`;
   showLegend(true, 'Scottish swimmer racing');
 
